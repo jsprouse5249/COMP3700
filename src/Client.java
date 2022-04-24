@@ -203,6 +203,8 @@ public class Client {
 //                Customer customer = gson.fromJson(message.getContent(), Customer.class);
 //                customerViewController.updateCustomerInfo(customer);
 //                break;
+                ProductListModel productListModel = gson.fromJson(message.getContent(), ProductListModel.class);
+
             }
 
             default:

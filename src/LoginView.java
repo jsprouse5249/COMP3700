@@ -1,6 +1,7 @@
 import com.google.gson.Gson;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,11 +13,16 @@ public class LoginView {
     private JPanel mainPanel;
     private JTextField usernameField;
     private JPasswordField passwordField;
+    private JButton newUserButton;
     private JButton loginButton;
     private Client client;
 
+    private NewUserViewController newUserViewController;
+
     public LoginView(Client client) {
         this.client = client;
+        this.newUserViewController = new NewUserViewController(client);
+
 
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -29,6 +35,18 @@ public class LoginView {
                 String accountString =  gson.toJson(account);
                 Message message = new Message(Message.LOGIN, accountString);
                 client.sendMessage(message);
+            }
+        });
+
+        newUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame("New User");
+                frame.setContentPane(newUserViewController.getMainPanel());
+                frame.setMinimumSize(new Dimension(800, 400));
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.pack();
+                frame.setVisible(true);
             }
         });
     }

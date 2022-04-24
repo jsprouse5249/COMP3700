@@ -20,7 +20,9 @@ public class Message {
 
     public static final int LOGIN = 11;
     public static final int FIND_PRODUCT = 12;
-    public static final int FIND_PRODUCT_REPLY = 12;
+    public static final int FIND_PRODUCT_REPLY = 13;
+
+    public static final int SAVE_NEW_USER = 14;
 
 
 

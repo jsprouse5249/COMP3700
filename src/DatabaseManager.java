@@ -74,6 +74,12 @@ public class DatabaseManager {
                 return new Message(Message.SUCCESS, "Account Login Successful");
             }
 
+            case Message.SAVE_NEW_USER: {
+                NewUser newUser = gson.fromJson(message.getContent(), NewUser.class);
+                boolean result = saveNewUser(newUser);
+                if (result) return new Message(Message.SUCCESS, "New user saved");
+                else return new Message(Message.FAIL, "Cannot save the new user.");
+            }
 
             default:
                 return new Message(Message.FAIL, "Cannot process the message");
@@ -252,5 +258,41 @@ public class DatabaseManager {
             return false; // cannot save!
         }
     }
+
+    public boolean saveNewUser(NewUser newUser) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM Users WHERE UserID = ?");
+            statement.setInt(1, newUser.getUserID());
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) { // this user exists, update its fields
+                statement = connection.prepareStatement("UPDATE Users SET UserName = ?, Password = ?, DisplayName = ?, isManager = ? WHERE UserID = ?");
+                statement.setString(1, newUser.getUsername());
+                statement.setString(2, newUser.getPassword());
+                statement.setString(3, newUser.getDisplayName());
+                statement.setInt(4, newUser.getIsManager());
+            }
+            else { // this product does not exist, use insert into
+                statement = connection.prepareStatement("INSERT INTO Users VALUES (?, ?, ?, ?, ?)");
+                statement.setString(2, newUser.getUsername());
+                statement.setString(3, newUser.getPassword());
+                statement.setString(4, newUser.getDisplayName());
+                statement.setInt(5, newUser.getIsManager());
+                statement.setInt(1, newUser.getUserID());
+
+            }
+            statement.execute();
+            resultSet.close();
+            statement.close();
+            return true;        // save successfully
+
+        } catch (SQLException e) {
+            System.out.println("Database access error!");
+            e.printStackTrace();
+            return false; // cannot save!
+        }
+    }
+
 
 }
