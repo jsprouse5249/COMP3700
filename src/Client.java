@@ -12,13 +12,10 @@ import java.net.Socket;
 import java.util.Base64;
 
 public class Client {
-    private JTextArea messageTextArea;
-    private JButton manageCheckoutButton;
-    private JButton manageProductButton;
-    private JButton manageCustomerButton;
     private JPanel mainPanel;
-    private JButton manageOrderButton;
-    private JButton loginButton;
+    private JButton registerNewUserButton;
+    private JButton goToLoginButton;
+    private JTextArea messageTextArea;
 
 
     private SecretKey secretKey;
@@ -34,10 +31,12 @@ public class Client {
 
     private Worker worker;
 
+    private LoginView loginView;
+    private NewUserViewController newUserViewController;
+    private CustomerViewController customerViewController;
+    private FindProductsView findProductsView;
     private ProductViewController productViewController;
     private OrderViewController orderViewController;
-    private CustomerViewController customerViewController;
-    private LoginView loginView;
 
     public Client() {
         try {
@@ -73,52 +72,30 @@ public class Client {
         Thread workerThread = new Thread(worker);
         workerThread.start();
 
-        this.productViewController = new ProductViewController(this);
-        this.customerViewController = new CustomerViewController(this);
+        this.newUserViewController = new NewUserViewController(this);
         this.orderViewController = new OrderViewController(this);
+        this.productViewController = new ProductViewController(this);
+        this.orderViewController = new OrderViewController(this);
+        this.findProductsView = new FindProductsView();
         this.loginView = new LoginView(this);
 
-        manageProductButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame frame = new JFrame("Manage Product");
-                frame.setContentPane(productViewController.getMainPanel());
-                frame.setMinimumSize(new Dimension(800, 400));
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setVisible(true);
-            }
-        });
-
-        manageOrderButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame frame = new JFrame("Manage Order");
-                frame.setContentPane(orderViewController.getMainPanel());
-                frame.setMinimumSize(new Dimension(800, 400));
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setVisible(true);
-            }
-        });
-
-        manageCustomerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame frame = new JFrame("Manage Customer");
-                frame.setContentPane(customerViewController.getMainPanel());
-                frame.setMinimumSize(new Dimension(800, 400));
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setVisible(true);
-            }
-        });
-
-        loginButton.addActionListener(new ActionListener() {
+        goToLoginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFrame frame = new JFrame("Login");
                 frame.setContentPane(loginView.getMainPanel());
+                frame.setMinimumSize(new Dimension(800, 400));
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.pack();
+                frame.setVisible(true);
+            }
+        });
+
+        registerNewUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame("Register");
+                frame.setContentPane(newUserViewController.getMainPanel());
                 frame.setMinimumSize(new Dimension(800, 400));
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.pack();

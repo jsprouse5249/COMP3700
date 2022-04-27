@@ -18,11 +18,12 @@ public class LoginView {
     private Client client;
 
     private NewUserViewController newUserViewController;
+    private ManagerViewController managerViewController;
 
     public LoginView(Client client) {
         this.client = client;
         this.newUserViewController = new NewUserViewController(client);
-
+        this.managerViewController = new ManagerViewController(client);
 
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -35,6 +36,13 @@ public class LoginView {
                 String accountString =  gson.toJson(account);
                 Message message = new Message(Message.LOGIN, accountString);
                 client.sendMessage(message);
+
+                JFrame frame = new JFrame("Manage Store");
+                frame.setContentPane(managerViewController.getMainPanel());
+                frame.setMinimumSize(new Dimension(800, 400));
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.pack();
+                frame.setVisible(true);
             }
         });
 
